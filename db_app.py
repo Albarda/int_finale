@@ -1,17 +1,33 @@
-import boto3
-from datetime import date
+from aws_cdk import (
+    core as cdk,
+    aws_ecs as ecs,
+    aws_ecr as ecr
+)
+from aws_solutions_constructs.aws_fargate_dynamodb import FargateToDynamoDB, FargateToDynamoDBProps
 
-# Initialize clients for DynamoDB and SNS
-dynamodb = boto3.resource('dynamodb')
-sns = boto3.client('sns')
+class MyFargateStack(cdk.Stack):
 
-# Get today's task from DynamoDB
-table = dynamodb.Table('Tasks')
-today = date.today().strftime('%Y-%m-%d')  # Format date as a string
-response = table.get_item(Key={'Date': today})
-task = response['Item']['Task']
+    def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
+        super().__init__(scope, id, **kwargs)
 
-# Send SNS Notification
-topic_arn = "YOUR_SNS_TOPIC_ARN"
-message = f"Task for {today}: {task}"
-sns.publish(TopicArn=topic_arn, Message=message)
+        # Existing ECR repository
+        ecr_repository = ecr.Repository.from_repository_arn(
+            self, 'ExistingEcrRepo',
+            "704059047372.dkr.ecr.eu-west-1.amazonaws.com/db_app:latest"
+        )
+
+        # ECS Task Definition with the existing ECR repository
+        task_definition = ecs.FargateTaskDefinition(
+            self, 'int_final'
+        )
+        container = task_definition.add_container(
+            'MyContainer',
+            image=ecs.ContainerImage.from_ecr_repository(ecr_repository)
+        )
+
+        # Create Fargate Service and DynamoDB table
+        FargateToDynamoDB(self, 'FargateToDynamoDB',
+            public_api=True,
+            fargate_task_definition=task_definition
+        )
+
