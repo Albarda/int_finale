@@ -3,7 +3,7 @@ from aws_cdk import (
     aws_ecs as ecs,
     aws_ecr as ecr
 )
-#test
+#test-2
 from aws_solutions_constructs.aws_fargate_dynamodb import FargateToDynamoDB, FargateToDynamoDBProps
 
 class MyFargateStack(cdk.Stack):
