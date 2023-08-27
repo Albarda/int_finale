@@ -16,5 +16,5 @@ COPY . /app/
 # Define environment variable (Optional, you can set these variables from Fargate task definition as well)
 ENV AWS_DEFAULT_REGION=us-west-1
 
-# Run main.py when the container is launched
+# Run main.py when the container is launched a
 CMD ["python", "main.py"]
