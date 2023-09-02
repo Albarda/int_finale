@@ -1,7 +1,7 @@
 # Use an official Python runtime as the base image
 FROM python:3.9-slim
 
-EXPOSE port 80:80
+EXPOSE 80
 
 # Set the working directory in the container
 WORKDIR /app
@@ -16,7 +16,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . /app/
 
 # Define environment variable (Optional, you can set these variables from Fargate task definition as well)
-ENV AWS_DEFAULT_REGION=us-west-1
+ENV AWS_DEFAULT_REGION=eu-west-1
 
 # Run main.py when the container is launched
 CMD ["python", "main.py"]
