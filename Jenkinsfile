@@ -44,8 +44,8 @@ pipeline {
         steps {
             script {
                 def version = sh(script: 'cat version.txt', returnStdout: true).trim()
-                sh "sudo docker build -f /home/ec2-user/int_finale/Dockerfile -t ${DOCKER_REGISTRY_DB_APP}:${version}.${BUILD_NUMBER} .
-                    sudo docker tag ${DOCKER_REGISTRY_DB_APP}:${version}.${BUILD_NUMBER} ${DOCKER_REGISTRY_DB_APP}:latest"
+                sh "sudo docker build -f /home/ec2-user/int_finale/Dockerfile -t ${DOCKER_REGISTRY_DB_APP}:${version}.${BUILD_NUMBER} ."
+                sh "sudo docker tag ${DOCKER_REGISTRY_DB_APP}:${version}.${BUILD_NUMBER} ${DOCKER_REGISTRY_DB_APP}:latest"
             }
         }
     }
