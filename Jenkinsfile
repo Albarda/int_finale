@@ -57,6 +57,8 @@ pipeline {
                         def newVersion = "${major}.${minor}.${patch}"
                         
                         sh """
+                            set -x
+                            set -e
                             cd ~/int_finale/
                             git stash
                             git checkout main
@@ -94,7 +96,7 @@ pipeline {
         stage('Cleanup Jenkins Server') {
             // change test
             steps {
-                sh 'docker system prune -a -f'
+                sh 'sudo docker system prune -a -f'
             }
         }
     }
