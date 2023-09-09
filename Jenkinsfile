@@ -28,7 +28,7 @@ pipeline {
     }
 
     
-    stage('check for pylint')
+   // stage('check for pylint')
 
 
     stage('Push DB_APP Docker Image') {
