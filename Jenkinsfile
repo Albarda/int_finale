@@ -18,32 +18,32 @@ pipeline {
         }
 
 
-        stage('Build Nginx Docker Image') {
-        steps {
-            script {
-                def version = sh(script: 'cat version.txt', returnStdout: true).trim()
-                sh "sudo docker build -f /home/ec2-user/int_finale/Dockerfile -t ${DOCKER_REGISTRY_DB_APP}:${version}.${BUILD_NUMBER} ."
-            }
-        }
-    }
+//        stage('Build Nginx Docker Image') {
+//        steps {
+//            script {
+//                def version = sh(script: 'cat version.txt', returnStdout: true).trim()
+//                sh "sudo docker build -f /home/ec2-user/int_finale/Dockerfile -t ${DOCKER_REGISTRY_DB_APP}:${version}.${BUILD_NUMBER} ."
+//            }
+//        }
+//    }
 
     
    // stage('check for pylint')
 
 
-    stage('Push DB_APP Docker Image') {
-        steps {
-            withCredentials([usernamePassword(credentialsId: 'AWS-Credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-                script {
-                    def version = sh(script: 'cat version.txt', returnStdout: true).trim()
-                    sh """
-                       aws ecr get-login-password --region eu-west-1 | sudo docker login --username AWS --password-stdin ${DOCKER_REGISTRY_DB_APP}
-                       sudo docker push ${DOCKER_REGISTRY_DB_APP}:${version}.${BUILD_NUMBER}
-                    """
-                }
-            }
-        }
-    }
+ //   stage('Push DB_APP Docker Image') {
+  //      steps {
+    //        withCredentials([usernamePassword(credentialsId: 'AWS-Credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+      //          script {
+        //            def version = sh(script: 'cat version.txt', returnStdout: true).trim()
+          //          sh """
+            //           aws ecr get-login-password --region eu-west-1 | sudo docker login --username AWS --password-stdin ${DOCKER_REGISTRY_DB_APP}
+              //         sudo docker push ${DOCKER_REGISTRY_DB_APP}:${version}.${BUILD_NUMBER}
+                //    """
+ //               }
+   //         }
+     //   }
+   // }
 
 
  stage('Update Version') {
@@ -56,10 +56,12 @@ pipeline {
                         patch = patch.toInteger() + 1
                         def newVersion = "${major}.${minor}.${patch}"
                         
-                        sh """
-                            sh "echo "PATH: $PATH"
-                            type pwd
-                            builtin pwd"
+                        sh '''
+                                echo "PATH: $PATH"
+                                type pwd
+                                builtin pwd
+                                '''
+
                             sh "cd ~/int_finale/"
                             sh "git branch -a"
                             sh "git status"
