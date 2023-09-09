@@ -57,6 +57,9 @@ pipeline {
                         def newVersion = "${major}.${minor}.${patch}"
                         
                         sh """
+                            sh "git branch -a"
+                            sh "pwd"
+                            sh "git status"
                             git stash
                             git checkout main
                             echo "echo \${GIT_PASSWORD}" > askpass.sh
