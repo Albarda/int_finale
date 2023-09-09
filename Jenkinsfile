@@ -57,7 +57,7 @@ pipeline {
                         def newVersion = "${major}.${minor}.${patch}"
                         
                         sh """
-                            sh "echo "PATH: $PATH"
+                            echo "PATH: $PATH"
                             type pwd
                             builtin pwd"""
                             sh "cd ~/int_finale/"
