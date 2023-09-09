@@ -56,15 +56,14 @@ pipeline {
                         patch = patch.toInteger() + 1
                         def newVersion = "${major}.${minor}.${patch}"
                         
-                        sh '''
-                                echo "PATH: $PATH"
-                                type pwd
-                                builtin pwd
-                                '''
-
+                        sh """
+                            sh "echo "PATH: $PATH"
+                            type pwd
+                            builtin pwd"""
                             sh "cd ~/int_finale/"
                             sh "git branch -a"
                             sh "git status"
+                            sh """
                             git stash
                             git checkout main
                             echo "echo \${GIT_PASSWORD}" > askpass.sh
