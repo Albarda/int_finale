@@ -57,7 +57,9 @@ pipeline {
                         def newVersion = "${major}.${minor}.${patch}"
                         
                         sh """
-                            sh "pwd"
+                            sh "echo "PATH: $PATH"
+                            type pwd
+                            builtin pwd"
                             sh "cd ~/int_finale/"
                             sh "git branch -a"
                             sh "git status"
