@@ -22,7 +22,7 @@ pipeline {
         steps {
             script {
                 def version = sh(script: 'cat version.txt', returnStdout: true).trim()
-                sh "docker build -f Dockerfile -t ${DOCKER_REGISTRY_DB_APP}:${version}.${BUILD_NUMBER} ."
+                sh "docker build -f /home/ec2-user/int_finale/Dockerfile -t ${DOCKER_REGISTRY_DB_APP}:${version}.${BUILD_NUMBER} ."
             }
         }
     }
