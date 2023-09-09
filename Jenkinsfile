@@ -17,20 +17,15 @@ pipeline {
             }
         }
 
-          stage('Install Pylint') {
-            steps {
-                sh 'pip install pylint' // Or use any method to install pylint
-            }
-        }
 
         stage('Run Pylint') {
             steps {
-                sh 'pylint main.py || exit 0' // This will run pylint on all .py files and will not fail the build
+                sh 'pylint **/*.py || exit 0' // This will run pylint on all .py files and will not fail the build
             }
         }
 
 
-        stage('Build Nginx Docker Image') {
+        stage('Build DB_APP Docker Image') {
         steps {
             script {
                 def version = sh(script: 'cat version.txt', returnStdout: true).trim()
@@ -39,8 +34,8 @@ pipeline {
         }
     }
 
-
-    stage('Push DB_APP Docker Image') {
+    
+        stage('Push DB_APP Docker Image') {
         steps {
             withCredentials([usernamePassword(credentialsId: 'AWS-Credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                 script {
