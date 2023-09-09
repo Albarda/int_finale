@@ -57,8 +57,9 @@ pipeline {
                         def newVersion = "${major}.${minor}.${patch}"
                         
                         sh """
-                            sh "git branch -a"
                             sh "pwd"
+                            sh "cd ~/int_finale/"
+                            sh "git branch -a"
                             sh "git status"
                             git stash
                             git checkout main
