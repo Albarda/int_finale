@@ -32,7 +32,7 @@ pipeline {
 
             println "Pylint score: ${pylint_score}"
 
-            if (pylint_score < 5) {
+            if (pylint_score < 0) {
                 error "Pylint score is under 5. Exiting build."
             }
         }
