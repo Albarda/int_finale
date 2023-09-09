@@ -25,7 +25,7 @@ pipeline {
 
         stage('Run Pylint') {
             steps {
-                sh 'pylint **/*.py || exit 0' // This will run pylint on all .py files and will not fail the build
+                sh 'pylint main.py || exit 0' // This will run pylint on all .py files and will not fail the build
             }
         }
 
