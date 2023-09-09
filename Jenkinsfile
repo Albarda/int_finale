@@ -19,10 +19,25 @@ pipeline {
 
 
         stage('Run Pylint') {
-            steps {
-                sh 'pylint **/*.py || exit 0' // This will run pylint on all .py files and will not fail the build
+    steps {
+        script {
+            def pylint_output = sh(script: 'pylint **/*.py || true', returnStdout: true).trim()
+            def pylint_score = 0
+
+            // Extract the pylint score from the output
+            def matcher = (pylint_output =~ /Your code has been rated at ([\-0-9.]+)/)
+            if (matcher.matches()) {
+                pylint_score = Float.parseFloat(matcher[0][1])
+            }
+
+            println "Pylint score: ${pylint_score}"
+
+            if (pylint_score < 5) {
+                error "Pylint score is under 5. Exiting build."
             }
         }
+    }
+}
 
 
         stage('Build DB_APP Docker Image') {
