@@ -17,6 +17,18 @@ pipeline {
             }
         }
 
+          stage('Install Pylint') {
+            steps {
+                sh 'pip install pylint' // Or use any method to install pylint
+            }
+        }
+
+        stage('Run Pylint') {
+            steps {
+                sh 'pylint **/*.py || exit 0' // This will run pylint on all .py files and will not fail the build
+            }
+        }
+
 
         stage('Build Nginx Docker Image') {
         steps {
@@ -26,9 +38,6 @@ pipeline {
             }
         }
     }
-
-    
-   // stage('check for pylint')
 
 
     stage('Push DB_APP Docker Image') {
@@ -44,53 +53,6 @@ pipeline {
             }
         }
     }
-
-
- stage('Update Version') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'alon_github', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASSWORD')]) {
-                    script {
-                        def version = sh(script: 'cat version.txt', returnStdout: true).trim()
-                        println "Current version: ${version}"
-                        def (major, minor, patch) = version.tokenize('.')
-                        patch = patch.toInteger() + 1
-                        def newVersion = "${major}.${minor}.${patch}"
-                        
-                        sh """
-                            set -x
-                            set -e
-                            cd ~/int_finale/
-                            git stash
-                            git checkout main
-                            echo "echo \${GIT_PASSWORD}" > askpass.sh
-                            chmod +x askpass.sh
-                            export GIT_ASKPASS=\$(pwd)/askpass.sh
-                            git pull --rebase origin main
-                            git stash apply
-                            echo ${newVersion} > version.txt
-                            echo "New version:"
-                            cat version.txt
-                            git add version.txt
-                            GIT_DIFF=\$(git diff --staged --quiet || echo 'Changes')
-                            if [[ \${GIT_DIFF} == 'Changes' ]]; then
-                                git commit -m 'Increment version to ${newVersion}'
-                                git push origin main
-                            else
-                                echo "No changes to commit"
-                            fi
-                        """
-                    }
-                }
-            }
-            post {
-        success {
-            echo "Update Version stage completed successfully."
-        }
-        failure {
-            echo "Update Version stage failed."
-        }
-    }
-        }
 
 
         stage('Cleanup Jenkins Server') {
