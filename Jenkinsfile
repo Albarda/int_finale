@@ -28,14 +28,18 @@ pipeline {
     }
 
     
+    stage('check for pylint')
+
+
     stage('Push DB_APP Docker Image') {
         steps {
             withCredentials([usernamePassword(credentialsId: 'AWS-Credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                 script {
                     def version = sh(script: 'cat version.txt', returnStdout: true).trim()
                     sh """
-                       aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin ${DOCKER_REGISTRY_DB_APP}
-                       sudo docker push ${DOCKER_REGISTRY_DB_APP}:${version}.${BUILD_NUMBER}
+                       aws ecr get-login-password --region eu-west-1 | sudo docker login --username AWS --password-stdin ${DOCKER_REGISTRY_DB_APP}
+                       sudo 
+                       docker push ${DOCKER_REGISTRY_DB_APP}:${version}.${BUILD_NUMBER}
                     """
                 }
             }
