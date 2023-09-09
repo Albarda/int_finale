@@ -80,6 +80,14 @@ pipeline {
                     }
                 }
             }
+            post {
+        success {
+            echo "Update Version stage completed successfully."
+        }
+        failure {
+            echo "Update Version stage failed."
+        }
+    }
         }
 
 
