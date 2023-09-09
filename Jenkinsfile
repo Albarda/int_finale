@@ -22,7 +22,7 @@ pipeline {
         steps {
             script {
                 def version = sh(script: 'cat version.txt', returnStdout: true).trim()
-                sh "docker build -f /home/ec2-user/int_finale/Dockerfile -t ${DOCKER_REGISTRY_DB_APP}:${version}.${BUILD_NUMBER} ."
+                sh "sudo docker build -f /home/ec2-user/int_finale/Dockerfile -t ${DOCKER_REGISTRY_DB_APP}:${version}.${BUILD_NUMBER} ."
             }
         }
     }
@@ -35,7 +35,7 @@ pipeline {
                     def version = sh(script: 'cat version.txt', returnStdout: true).trim()
                     sh """
                        aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin ${DOCKER_REGISTRY_DB_APP}
-                       docker push ${DOCKER_REGISTRY_DB_APP}:${version}.${BUILD_NUMBER}
+                       sudo docker push ${DOCKER_REGISTRY_DB_APP}:${version}.${BUILD_NUMBER}
                     """
                 }
             }
